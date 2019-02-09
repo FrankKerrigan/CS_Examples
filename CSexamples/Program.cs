@@ -7,9 +7,9 @@ namespace CSexamples
     {
         static void Main(string[] args)
         {
-            GetBinarySearchRecursive();
+          //  GetBinarySearchRecursive();
 
-          //  BinarySearch();
+           BinarySearch();
 
             // Console.Write("List exclusion: ");
             // ItemsNotInBothLists();
@@ -27,12 +27,18 @@ namespace CSexamples
 
         static void GetBinarySearchRecursive()
         {
-            var list = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 23, 44, 66, 77, 88, 99, 101, 102, 104, 170, 344, 445, 565, 673, 733, 874, 912, 1001, 1120 };
-            int searchTerm = 77;
+            var list = new[] { 2, 3, 4, 5, 6, 7, 8, 9, 11, 23, 44, 66, 77, 88, 99, 101, 102, 104, 170, 344, 445, 565, 673, 733, 874, 912, 1001, 1120 };
+            int searchTerm = 102;
             int start = 0;
             int end = list.Length;
 
             var RecordNo = BinarySearchRecursive(ref list, start, end, searchTerm);
+
+            if (RecordNo == -1)
+            {
+                Console.WriteLine("Record not found");
+                return;
+            }
 
             Console.WriteLine($"Seatch Term: {searchTerm}   Record Position: {RecordNo},  Value: {list[RecordNo]}");
         }
@@ -46,7 +52,10 @@ namespace CSexamples
                 return mid;
 
            start = (searchterm < result) ? start : start + ((end - start) / 2);
-           end = (searchterm < result) ? end - mid : end;
+           end = (searchterm < result) ? end - ((end - start) / 2) : end;           
+
+            if (Math.Abs(start - end) == 1 &&  mid != 1)
+                return -1;
 
            return BinarySearchRecursive(ref terms,  start,  end,  searchterm);
         }
@@ -56,7 +65,7 @@ namespace CSexamples
         {
             // sort array
             var list = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 23, 44, 66, 77, 88, 99, 101, 102, 104, 170, 344, 445, 565, 673, 733, 874, 912, 1001, 1120 };
-            var searchTerm = 2;
+            var searchTerm = 9999;
             int result = -1; //assume is all postive numbers
             var start = 0;
             var end = list.Length;
@@ -67,10 +76,17 @@ namespace CSexamples
                 int mid = ((end - start) / 2) + start;
                 result = list[mid];
 
-                RecordPosition = mid; // will be last one test;
+                RecordPosition = mid; // will be last one tested;
 
                 start = (searchTerm < result) ? start : start + ((end - start) / 2);
-                end = (searchTerm < result) ? end - mid : end;
+                end = (searchTerm < result) ? end - ((end - start) / 2) : end;
+
+                if (searchTerm != result && Math.Abs(start - end) == 1 && mid != 1)
+                {
+                    result = -1;
+                    Console.WriteLine($"Seatch Term: {searchTerm} NOT Found!");
+                    return;
+                }
 
             }
 
